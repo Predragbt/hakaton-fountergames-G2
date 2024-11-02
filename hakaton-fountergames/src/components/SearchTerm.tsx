@@ -13,13 +13,13 @@ export const SearchTerm: React.FC<SearchTermProps> = ({
 
   const handleSearchClick = () => {
     if (searchInput) {
-      onSearch(searchInput); // Call onSearch with the input value
+      onSearch(searchInput);
     }
   };
 
   const handleClearClick = () => {
-    setSearchInput(""); // Clear the input field
-    onClear(); // Call onClear to clear the search results in MultySearch
+    setSearchInput("");
+    onClear();
   };
 
   return (
@@ -38,7 +38,7 @@ export const SearchTerm: React.FC<SearchTermProps> = ({
           />
           {searchInput && (
             <button
-              onClick={handleClearClick} // Clear input and cards when "✕" is clicked
+              onClick={handleClearClick}
               className="absolute right-3 top-3 text-gray-400 hover:text-gray-200 focus:outline-none"
             >
               ✕
