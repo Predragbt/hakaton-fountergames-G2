@@ -3,6 +3,7 @@ import { useData } from "@/context/DataContext";
 
 export const VideoPlayer = () => {
   const [searchInput, setSearchInput] = useState<string>("");
+  const [startAt, setStartAt] = useState<number | null>(null);
   const { selectedVideo } = useData();
 
   if (!selectedVideo) {
@@ -13,6 +14,7 @@ export const VideoPlayer = () => {
     entry.word.toLowerCase().includes(searchInput.toLowerCase())
   );
 
+  // Extract video ID from YouTube URL
   const videoIdMatch = selectedVideo.ytUrl.match(
     /(?:v=|\/)([a-zA-Z0-9_-]{11})/
   );
@@ -22,15 +24,23 @@ export const VideoPlayer = () => {
     return <p className="text-center text-gray-400">Invalid video URL</p>;
   }
 
+  // Handle timestamp click
+  const handleTimestampClick = (timestamp: number) => {
+    setStartAt(timestamp); // Set start time
+  };
+
   return (
-    <div className="p-4 bg-gray-800 rounded-xl shadow-[0_4px_20px_rgba(128,128,128,0.6)] border border-gray-700 transition duration-300 hover:shadow-[0_4px_20px_rgba(70,130,180,0.8)]">
+    <div className="p-4 bg-gray-800 h-full rounded-xl shadow-[0_4px_20px_rgba(128,128,128,0.6)] border border-gray-700 transition duration-300 hover:shadow-[0_4px_20px_rgba(70,130,180,0.8)]">
       <div className="aspect-w-16 aspect-h-9 mb-6">
         <iframe
-          src={`https://www.youtube.com/embed/${videoId}`}
+          src={`https://www.youtube.com/embed/${videoId}?start=${
+            startAt || 0
+          }&autoplay=1`}
           title={`YouTube video player for ${selectedVideo.id}`}
           allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
           allowFullScreen
           className="w-full h-full rounded-lg"
+          key={startAt} // Forces re-render on startAt change
         />
       </div>
 
@@ -53,10 +63,13 @@ export const VideoPlayer = () => {
               key={index}
               className="flex justify-between items-center p-2 bg-gray-700 rounded-lg text-gray-200 mb-4"
             >
-              <p className="text-sm">{entry.word}</p>
-              <span className="text-xs text-blue-400 font-semibold">
+              <p className="text-sm">{entry.word.toUpperCase()}:</p>
+              <button
+                onClick={() => handleTimestampClick(entry.timestamp)}
+                className="bg-gradient-to-r from-blue-700 to-purple-700 text-white text-xs font-semibold py-1 px-2 rounded-lg hover:from-purple-700 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-200 ease-out shadow-md hover:shadow-lg"
+              >
                 {entry.timestamp}s
-              </span>
+              </button>
             </div>
           ))
         ) : (

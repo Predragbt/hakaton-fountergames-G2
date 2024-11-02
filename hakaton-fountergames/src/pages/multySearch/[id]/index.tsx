@@ -6,6 +6,7 @@ const ShowVideo = () => {
   const { query } = useRouter();
   const { data } = useData();
   const [searchInput, setSearchInput] = useState<string>("");
+  const [startAt, setStartAt] = useState<number | null>(null);
 
   // Extract video ID from URL query
   const videoId = Number(query.id);
@@ -26,6 +27,10 @@ const ShowVideo = () => {
     entry.word.toLowerCase().includes(searchInput.toLowerCase())
   );
 
+  const handleTimestampClick = (timestamp: number) => {
+    setStartAt(timestamp);
+  };
+
   return (
     <div className="flex mx-auto max-w-7xl mt-20 gap-6">
       {/* Video Player Section */}
@@ -33,11 +38,14 @@ const ShowVideo = () => {
         <div className="aspect-w-16 aspect-h-9 mb-6">
           {embedVideoId ? (
             <iframe
-              src={`https://www.youtube.com/embed/${embedVideoId}`}
+              src={`https://www.youtube.com/embed/${embedVideoId}?start=${
+                startAt || 0
+              }&autoplay=1`}
               title={`YouTube video player for ${selectedVideo.id}`}
               allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
               allowFullScreen
               className="w-full h-full rounded-lg"
+              key={startAt} // Forces re-render on startAt change
             />
           ) : (
             <p className="text-center text-gray-400">Invalid video URL</p>
@@ -63,10 +71,13 @@ const ShowVideo = () => {
                 key={index}
                 className="flex justify-between items-center p-2 bg-gray-700 rounded-lg text-gray-200 mb-4"
               >
-                <p className="text-sm">{entry.word}</p>
-                <span className="text-xs text-blue-400 font-semibold">
+                <p className="text-sm">{entry.word.toUpperCase()}:</p>
+                <button
+                  onClick={() => handleTimestampClick(entry.timestamp)}
+                  className="bg-gradient-to-r from-blue-700 to-purple-700 text-white font-semibold py-1 px-2 rounded-lg hover:from-purple-700 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-200 ease-out shadow-md hover:shadow-lg"
+                >
                   {entry.timestamp}s
-                </span>
+                </button>
               </div>
             ))
           ) : (

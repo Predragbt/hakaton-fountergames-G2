@@ -7,7 +7,8 @@ interface DataContextProps {
   selectedVideo: MockDataProps | null;
   matches: MockDataProps[];
   loading: boolean;
-  fetchData: (term: string) => void;
+  searchTerm: string; // New searchTerm state
+  searchVideos: (term: string) => void;
   clearResults: () => void;
   submitVideoUrl: (url: string) => void;
 }
@@ -16,11 +17,10 @@ const DataContext = createContext<DataContextProps | undefined>(undefined);
 
 export const DataProvider = ({ children }: { children: React.ReactNode }) => {
   const [data] = useState<MockDataProps[]>(mockData);
-  const [selectedVideo, setSelectedVideo] = useState<MockDataProps | null>(
-    null
-  );
+  const [selectedVideo, setSelectedVideo] = useState<MockDataProps | null>(null);
   const [matches, setMatches] = useState<MockDataProps[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
+  const [searchTerm, setSearchTerm] = useState<string>(""); // State to store the search term
 
   const router = useRouter();
 
@@ -29,10 +29,8 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
       clearResults();
     };
 
-    // Listen to route change start event
     router.events.on("routeChangeStart", handleRouteChange);
 
-    // Cleanup listener on unmount
     return () => {
       router.events.off("routeChangeStart", handleRouteChange);
     };
@@ -43,8 +41,9 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
     setSelectedVideo(matchedVideo || null);
   };
 
-  const fetchData = (term: string) => {
+  const searchVideos = (term: string) => {
     setLoading(true);
+    setSearchTerm(term); // Update searchTerm with the provided term
     const filteredMatches = data.filter((video) =>
       video.transcription.some((entry) =>
         entry.word.toLowerCase().includes(term.toLowerCase().trim())
@@ -57,6 +56,7 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
   const clearResults = () => {
     setMatches([]);
     setSelectedVideo(null);
+    setSearchTerm(""); // Clear the search term
   };
 
   return (
@@ -66,7 +66,8 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
         selectedVideo,
         matches,
         loading,
-        fetchData,
+        searchTerm, // Pass the searchTerm in context
+        searchVideos,
         clearResults,
         submitVideoUrl,
       }}

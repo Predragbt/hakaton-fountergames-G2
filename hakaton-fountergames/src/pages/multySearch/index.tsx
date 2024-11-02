@@ -4,11 +4,11 @@ import { SearchTerm } from "@/components/SearchTerm";
 import { useData } from "@/context/DataContext";
 
 const MultySearch = () => {
-  const { matches, fetchData, clearResults, loading } = useData();
+  const { matches, searchVideos, clearResults, loading } = useData();
 
   return (
     <>
-      <SearchTerm onSearch={fetchData} onClear={clearResults} />
+      <SearchTerm onSearch={searchVideos} onClear={clearResults} />
       <div className="mt-10 mx-auto max-w-7xl">
         {loading ? (
           <p>Loading...</p>

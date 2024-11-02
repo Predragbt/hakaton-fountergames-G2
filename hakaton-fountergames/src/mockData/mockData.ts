@@ -11,7 +11,7 @@ export const mockData = [
     ytUrl:
       "https://www.youtube.com/watch?v=iHdviZkM7S4&ab_channel=AdamEschborn",
     summary:
-      "This is a summary of the first video, covering important concepts and explanations.",
+      "This is a summary of the first video, covering important concepts and explanations.This is a summary of the first video, covering important concepts and explanations.This is a summary of the first video, covering important concepts and explanations.This is a summary of the first video, covering important concepts and explanations.This is a summary of the first video, covering important concepts and explanations.This is a summary of the first video, covering important concepts and explanations.This is a summary of the first video, covering important concepts and explanations.This is a summary of the first video, covering important concepts and explanations.This is a summary of the first video, covering important concepts and explanations.This is a summary of the first video, covering important concepts and explanations.This is a summary of the first video, covering important concepts and explanations.This is a summary of the first video, covering important concepts and explanations.This is a summary of the first video, covering important concepts and explanations.This is a summary of the first video, covering important concepts and explanations.",
     transcription: [
       { word: "introduction", timestamp: 5 },
       { word: "concept", timestamp: 10 },
