@@ -1,7 +1,7 @@
-export const Transcribtion = () => {
+export const Summary = () => {
   return (
     <div className="p-4 bg-gray-800 rounded-xl shadow-[0_4px_20px_rgba(128,128,128,0.6)] border border-gray-700 transition duration-300 hover:shadow-[0_4px_20px_rgba(70,130,180,0.8)]">
-      <h3 className="text-2xl font-semibold text-gray-200 mb-4">Transcribtion</h3>
+      <h3 className="text-2xl font-semibold text-gray-200 mb-4">Summary</h3>
       <p className="text-gray-400">
         Lorem ipsum dolor sit amet consectetur adipisicing elit. Illum nulla,
         aperiam velit fugit nam possimus blanditiis dolores, deserunt quasi

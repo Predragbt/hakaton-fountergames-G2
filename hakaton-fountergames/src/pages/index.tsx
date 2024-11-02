@@ -1,6 +1,6 @@
 import { VideoSubmition } from "../components/VideoSubmition";
 import { VideoPlayer } from "../components/VideoPlayer";
-import { Transcribtion } from "../components/Transcribtion";
+import { Summary } from "../components/Summary";
 
 export default function Home() {
   return (
@@ -14,7 +14,7 @@ export default function Home() {
 
         {/* Transcription takes 2/3 width */}
         <div className="w-2/3">
-          <Transcribtion />
+          <Summary />
         </div>
       </div>
     </>

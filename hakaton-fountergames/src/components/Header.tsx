@@ -14,13 +14,7 @@ export const Header = () => {
 
         <nav className="space-x-6">
           <Link
-            href={"/summary"}
-            className="text-white hover:text-gray-200 transition duration-200 ease-in-out"
-          >
-            Get Summary
-          </Link>
-          <Link
-            href={"/"}
+            href={"/multySearch"}
             className="text-white hover:text-gray-200 transition duration-200 ease-in-out"
           >
             Multy Search
