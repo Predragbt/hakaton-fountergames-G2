@@ -5,10 +5,7 @@ interface SearchTermProps {
   onClear: () => void;
 }
 
-export const SearchTerm: React.FC<SearchTermProps> = ({
-  onSearch,
-  onClear,
-}) => {
+export const SearchTerm = ({ onSearch, onClear }: SearchTermProps) => {
   const [searchInput, setSearchInput] = useState<string>("");
 
   const handleSearchClick = () => {

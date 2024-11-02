@@ -1,9 +1,11 @@
 import { useState } from "react";
+import { useData } from "@/context/DataContext";
 
 export const VideoSubmition = () => {
   const [inputValue, setInputValue] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
+  const { submitVideoUrl } = useData(); // Access the context function
 
   const isValidYoutubeUrl = (url: string): boolean => {
     const youtubeRegex =
@@ -18,6 +20,12 @@ export const VideoSubmition = () => {
     }
     setError(null);
 
+    // Use context to find and set the matching video
+    submitVideoUrl(inputValue);
+    setSuccessMessage("Video submitted successfully!");
+
+    // Commented out POST request, for use later
+    /*
     try {
       const response = await fetch("https://<your-ngrok-url>/api/video", {
         method: "POST",
@@ -36,6 +44,7 @@ export const VideoSubmition = () => {
     } catch (error) {
       setError("An error occurred. Please try again later.");
     }
+    */
   };
 
   return (
@@ -55,7 +64,9 @@ export const VideoSubmition = () => {
           {inputValue && (
             <button
               onClick={() => {
-                setInputValue(""), setSuccessMessage(null), setError(null);
+                setInputValue("");
+                setSuccessMessage(null);
+                setError(null);
               }}
               className="absolute right-3 top-3 text-gray-400 hover:text-gray-200 focus:outline-none"
             >

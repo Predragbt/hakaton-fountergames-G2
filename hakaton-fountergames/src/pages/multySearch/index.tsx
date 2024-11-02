@@ -10,7 +10,13 @@ const MultySearch = () => {
     <>
       <SearchTerm onSearch={fetchData} onClear={clearResults} />
       <div className="mt-10 mx-auto max-w-7xl">
-        {loading ? <p>Loading...</p> : <SearchCards matches={matches} />}
+        {loading ? (
+          <p>Loading...</p>
+        ) : matches.length > 0 ? (
+          <SearchCards matches={matches} />
+        ) : (
+          <p className="text-center text-gray-400">No search results found.</p>
+        )}
       </div>
     </>
   );

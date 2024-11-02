@@ -1,32 +1,54 @@
-import React, { createContext, useContext, useState } from "react";
+import { createContext, useContext, useState, useEffect } from "react";
+import { useRouter } from "next/router";
+import { mockData, MockDataProps } from "@/mockData/mockData";
 
 interface DataContextProps {
-  matches: string[];
+  data: MockDataProps[];
+  selectedVideo: MockDataProps | null;
+  matches: MockDataProps[];
   loading: boolean;
-  fetchData: (query: string) => Promise<void>;
+  fetchData: (term: string) => void;
   clearResults: () => void;
+  submitVideoUrl: (url: string) => void;
 }
 
 const DataContext = createContext<DataContextProps | undefined>(undefined);
 
 export const DataProvider = ({ children }: { children: React.ReactNode }) => {
-  const [matches, setMatches] = useState<string[]>([]);
+  const [data] = useState<MockDataProps[]>(mockData);
+  const [selectedVideo, setSelectedVideo] = useState<MockDataProps | null>(
+    null
+  );
+  const [matches, setMatches] = useState<MockDataProps[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const fetchData = async (query: string) => {
+  const router = useRouter();
+
+  useEffect(() => {
+    const handleRouteChange = () => {
+      clearResults();
+    };
+
+    // Listen to route change start event
+    router.events.on("routeChangeStart", handleRouteChange);
+
+    // Cleanup listener on unmount
+    return () => {
+      router.events.off("routeChangeStart", handleRouteChange);
+    };
+  }, [router.events]);
+
+  const submitVideoUrl = (url: string) => {
+    const matchedVideo = data.find((video) => video.ytUrl === url);
+    setSelectedVideo(matchedVideo || null);
+  };
+
+  const fetchData = (term: string) => {
     setLoading(true);
-    const allPossibleMatches = [
-      "Result 1",
-      "Result 2",
-      "Result 3",
-      "Result 4",
-      "Result 1",
-      "Result 2",
-      "Result 3",
-      "Result 4",
-    ];
-    const filteredMatches = allPossibleMatches.filter((item) =>
-      item.toLowerCase().includes(query.toLowerCase().trim())
+    const filteredMatches = data.filter((video) =>
+      video.transcription.some((entry) =>
+        entry.word.toLowerCase().includes(term.toLowerCase().trim())
+      )
     );
     setMatches(filteredMatches);
     setLoading(false);
@@ -34,10 +56,21 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
 
   const clearResults = () => {
     setMatches([]);
+    setSelectedVideo(null);
   };
 
   return (
-    <DataContext.Provider value={{ matches, loading, fetchData, clearResults }}>
+    <DataContext.Provider
+      value={{
+        data,
+        selectedVideo,
+        matches,
+        loading,
+        fetchData,
+        clearResults,
+        submitVideoUrl,
+      }}
+    >
       {children}
     </DataContext.Provider>
   );
