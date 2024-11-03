@@ -5,7 +5,8 @@ import React, { useState } from "react";
 const ShowVideo = () => {
   const { query } = useRouter();
   const { data } = useData();
-  const [searchInput, setSearchInput] = useState<string>("");
+  const [searchInput, setSearchInput] = useState<string>(""); // input value
+  const [searchTerm, setSearchTerm] = useState<string>(""); // used for filtering results
   const [startAt, setStartAt] = useState<number | null>(null);
 
   // Extract video ID from URL query
@@ -16,19 +17,27 @@ const ShowVideo = () => {
     return <p className="text-center text-gray-400">Video not found</p>;
   }
 
-  // Extract the video ID from selectedVideo's YouTube URL
   const videoIdMatch = selectedVideo.ytUrl.match(
     /(?:v=|\/)([a-zA-Z0-9_-]{11})/
   );
   const embedVideoId = videoIdMatch ? videoIdMatch[1] : null;
 
-  // Filter transcription based on search input
+  // Filter transcription based on search term (only updates on button click)
   const filteredTranscription = selectedVideo.transcription.filter((entry) =>
-    entry.word.toLowerCase().includes(searchInput.toLowerCase())
+    entry.word.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const handleTimestampClick = (timestamp: number) => {
     setStartAt(timestamp);
+  };
+
+  const handleSearchClick = () => {
+    setSearchTerm(searchInput);
+  };
+
+  const handleClearSearch = () => {
+    setSearchInput("");
+    setSearchTerm("");
   };
 
   return (
@@ -52,15 +61,32 @@ const ShowVideo = () => {
           )}
         </div>
 
-        {/* Search Input */}
-        <div className="flex justify-center mb-4">
-          <input
-            type="text"
-            value={searchInput}
-            onChange={(e) => setSearchInput(e.target.value)}
-            placeholder="Search word..."
-            className="w-full max-w-md p-3 border border-gray-600 rounded-lg bg-gray-900 text-gray-200 placeholder-gray-400 shadow-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500 transition duration-200 ease-out hover:border-purple-500"
-          />
+        {/* Search Input and Button */}
+        <div className="flex flex-col gap-2 justify-center mb-4">
+          <div className="relative w-full max-w-md">
+            <input
+              type="text"
+              value={searchInput}
+              onChange={(e) => setSearchInput(e.target.value)}
+              placeholder="Enter search term..."
+              className="w-full p-3 pr-10 border border-gray-600 rounded-lg bg-gray-900 text-gray-200 placeholder-gray-400 shadow-sm focus:outline-none focus:border-blue-500 focus:ring-2 focus:ring-blue-500 transition duration-200 ease-out hover:border-purple-500"
+            />
+            {searchInput && (
+              <button
+                onClick={handleClearSearch}
+                className="absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-400 hover:text-gray-200 focus:outline-none"
+              >
+                ✕
+              </button>
+            )}
+          </div>
+
+          <button
+            onClick={handleSearchClick}
+            className="bg-gradient-to-r from-blue-700 to-purple-700 text-white font-semibold py-1 px-2 rounded-lg hover:from-purple-700 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-200 ease-out shadow-md hover:shadow-lg"
+          >
+            Search Transcript
+          </button>
         </div>
 
         {/* Transcription Display */}

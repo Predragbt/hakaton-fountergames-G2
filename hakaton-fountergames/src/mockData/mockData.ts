@@ -27,6 +27,7 @@ export const mockData = [
       { word: "advanced", timestamp: 3 },
       { word: "example", timestamp: 8 },
       { word: "demonstration", timestamp: 12 },
+      { word: "introduction", timestamp: 5 },
     ],
   },
   {

@@ -5,7 +5,7 @@ export const VideoSubmition = () => {
   const [inputValue, setInputValue] = useState<string>("");
   const [error, setError] = useState<string | null>(null);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
-  const { submitVideoUrl } = useData(); // Access the context function
+  const { submitVideoUrl } = useData();
 
   const isValidYoutubeUrl = (url: string): boolean => {
     const youtubeRegex =
@@ -14,37 +14,16 @@ export const VideoSubmition = () => {
   };
 
   const handleSubmit = async (): Promise<void> => {
+    setError(null);
+    setSuccessMessage(null); // Reset success message on each new attempt
+
     if (!isValidYoutubeUrl(inputValue)) {
       setError("Please enter a valid YouTube URL.");
       return;
     }
-    setError(null);
 
-    // Use context to find and set the matching video
     submitVideoUrl(inputValue);
     setSuccessMessage("Video submitted successfully!");
-
-    // Commented out POST request, for use later
-    /*
-    try {
-      const response = await fetch("https://<your-ngrok-url>/api/video", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ url: inputValue }),
-      });
-
-      if (response.ok) {
-        setSuccessMessage("Video submitted successfully!");
-        setInputValue("");
-      } else {
-        setError("Failed to submit video. Please try again.");
-      }
-    } catch (error) {
-      setError("An error occurred. Please try again later.");
-    }
-    */
   };
 
   return (
@@ -85,6 +64,19 @@ export const VideoSubmition = () => {
           Submit Video
         </button>
       </div>
+      {successMessage && (
+        <div className="flex items-center justify-center mt-10 pt-5">
+          <div className="bg-gradient-to-r from-blue-700 to-purple-700 p-[2px] rounded-lg">
+            <p className="bg-gray-800 p-4 rounded-lg border border-transparent shadow-md font-semibold text-center text-xl text-gray-100">
+              <span role="img" aria-label="mail" className="mr-2">
+                📬
+              </span>
+              Please be patient — you will receive the video in your email
+              shortly!
+            </p>
+          </div>
+        </div>
+      )}
     </>
   );
 };
