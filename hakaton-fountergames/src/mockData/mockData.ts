@@ -8,7 +8,8 @@ export interface MockDataProps {
 export const mockData = [
   {
     id: 1,
-    ytUrl: "https://www.youtube.com/watch?v=rhru93yFNVw&ab_channel=Vidico%3AVideoProductionCompany",
+    ytUrl:
+      "https://www.youtube.com/watch?v=rhru93yFNVw&ab_channel=Vidico%3AVideoProductionCompany",
     summary: `
       This video covers essential concepts and explanations:
       - Introduction to foundational ideas
@@ -26,7 +27,8 @@ export const mockData = [
   },
   {
     id: 2,
-    ytUrl: "https://www.youtube.com/watch?v=q6bewrSolcY&ab_channel=CEUInnovationsLab",
+    ytUrl:
+      "https://www.youtube.com/watch?v=q6bewrSolcY&ab_channel=CEUInnovationsLab",
     summary: `
       The video explores advanced topics with in-depth examples:
       - Covers advanced theories and methods
@@ -44,7 +46,8 @@ export const mockData = [
   },
   {
     id: 3,
-    ytUrl: "https://www.youtube.com/watch?v=7Mc3i8uUnFM&ab_channel=CreamyAnimation",
+    ytUrl:
+      "https://www.youtube.com/watch?v=7Mc3i8uUnFM&ab_channel=CreamyAnimation",
     summary: `
       A quick overview and final thoughts:
       - Provides a recap of important themes
@@ -59,7 +62,8 @@ export const mockData = [
   },
   {
     id: 4,
-    ytUrl: "https://www.youtube.com/watch?v=nGVSvlhitxY&ab_channel=InvestorsTradingAcademy",
+    ytUrl:
+      "https://www.youtube.com/watch?v=nGVSvlhitxY&ab_channel=InvestorsTradingAcademy",
     summary: `
       This video delves into practical applications:
       - Introduction to real-world applications of theories

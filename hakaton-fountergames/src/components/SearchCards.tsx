@@ -1,4 +1,3 @@
-import { useRouter } from "next/router";
 import { useData } from "@/context/DataContext";
 import Link from "next/link";
 import React, { useState } from "react";
@@ -17,7 +16,6 @@ export const SearchCards = () => {
   };
 
   const handleTimestampClick = (videoId: number, timestamp: number) => {
-    // Temporarily set `start` to `null` to trigger re-render on the same timestamp
     setVideoStates((prevState) => ({
       ...prevState,
       [videoId]: { start: null, autoplay: true },
@@ -66,7 +64,9 @@ export const SearchCards = () => {
                 More details
               </Link>
             </div>
-            <div className="text-sm text-gray-400 mt-4">
+
+            {/* Scrollable Transcription Section */}
+            <div className="text-sm text-gray-400 mt-4 max-h-40 overflow-y-auto">
               {filteredTranscription.map((entry, index) => (
                 <div
                   key={index}
