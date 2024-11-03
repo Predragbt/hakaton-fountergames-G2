@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useData } from "@/context/DataContext";
+import Link from "next/link";
 
 export const VideoSubmition = () => {
   const [inputValue, setInputValue] = useState<string>("");
@@ -71,8 +72,19 @@ export const VideoSubmition = () => {
               <span role="img" aria-label="mail" className="mr-2">
                 📬
               </span>
-              Please be patient — you will receive the video in your email
-              shortly!
+              Thank you for your submission! You’ll receive an email with your
+              video shortly.
+              <p className="mt-2">
+                If you prefer, you can also check back in a few minutes to see
+                if it's available in the{" "}
+                <Link
+                  href={"/multySearch"}
+                  className="text-purple-400 font-bold"
+                >
+                  Multi-Search
+                </Link>{" "}
+                section.
+              </p>
             </p>
           </div>
         </div>

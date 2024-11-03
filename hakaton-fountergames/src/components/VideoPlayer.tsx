@@ -11,7 +11,7 @@ export const VideoPlayer = () => {
   }
 
   const filteredTranscription = selectedVideo.transcription.filter((entry) =>
-    entry.word.toLowerCase().includes(searchInput.toLowerCase())
+    entry.phrase.toLowerCase().includes(searchInput.toLowerCase())
   );
 
   // Extract video ID from YouTube URL
@@ -63,7 +63,7 @@ export const VideoPlayer = () => {
               key={index}
               className="flex justify-between items-center p-2 bg-gray-700 rounded-lg text-gray-200 mb-4"
             >
-              <p className="text-sm">{entry.word.toUpperCase()}:</p>
+              <p className="text-sm">{entry.phrase.toUpperCase()}:</p>
               <button
                 onClick={() => handleTimestampClick(entry.timestamp)}
                 className="bg-gradient-to-r from-blue-700 to-purple-700 text-white text-xs font-semibold py-1 px-2 rounded-lg hover:from-purple-700 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-200 ease-out shadow-md hover:shadow-lg"

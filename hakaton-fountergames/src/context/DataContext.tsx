@@ -49,9 +49,10 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
     } else {
       const filteredMatches = data.filter(
         (video) =>
-          // Check if any transcription word contains the term or if the full URL matches exactly
-          video.transcription.some((entry) =>
-            entry.word.toLowerCase().includes(trimmedTerm)
+          // Check if any transcription phrase contains the term or if the full URL matches exactly
+          video.transcription.some(
+            (entry) =>
+              entry.phrase && entry.phrase.toLowerCase().includes(trimmedTerm)
           ) || video.ytUrl.toLowerCase() === trimmedTerm
       );
       setMatches(filteredMatches);
@@ -59,7 +60,6 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
 
     setLoading(false);
   };
-
   const clearResults = () => {
     setMatches([]);
     setSearchTerm("");

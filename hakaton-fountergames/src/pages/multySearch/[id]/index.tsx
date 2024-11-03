@@ -24,7 +24,7 @@ const ShowVideo = () => {
 
   // Filter transcription based on search term (only updates on button click)
   const filteredTranscription = selectedVideo.transcription.filter((entry) =>
-    entry.word.toLowerCase().includes(searchTerm.toLowerCase())
+    entry.phrase.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
   const handleTimestampClick = (timestamp: number) => {
@@ -42,6 +42,12 @@ const ShowVideo = () => {
   const handleClearSearch = () => {
     setSearchInput("");
     setSearchTerm("");
+  };
+
+  const formatTime = (seconds: number) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
   };
 
   return (
@@ -101,12 +107,12 @@ const ShowVideo = () => {
                 key={index}
                 className="flex justify-between items-center p-2 bg-gray-700 rounded-lg text-gray-200 mb-4"
               >
-                <p className="text-sm">{entry.word.toUpperCase()}:</p>
+                <p className="text-sm">{entry.phrase}:</p>
                 <button
                   onClick={() => handleTimestampClick(entry.timestamp)}
                   className="bg-gradient-to-r from-blue-700 to-purple-700 text-white font-semibold py-1 px-2 rounded-lg hover:from-purple-700 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-200 ease-out shadow-md hover:shadow-lg"
                 >
-                  {entry.timestamp}s
+                  {formatTime(entry.timestamp)}
                 </button>
               </div>
             ))
@@ -119,7 +125,11 @@ const ShowVideo = () => {
       {/* Summary Section */}
       <div className="w-2/3 p-4 bg-gray-800 rounded-xl shadow-[0_4px_20px_rgba(128,128,128,0.6)] border border-gray-700 transition duration-300 hover:shadow-[0_4px_20px_rgba(70,130,180,0.8)]">
         <h2 className="text-2xl font-semibold text-gray-200 mb-4">Summary</h2>
-        <p className="text-gray-300 mb-6">{selectedVideo.summary}</p>
+        {selectedVideo.summary.split("\n").map((line, index) => (
+          <p key={index} className="text-gray-300 mb-2">
+            {line}
+          </p>
+        ))}
       </div>
     </div>
   );

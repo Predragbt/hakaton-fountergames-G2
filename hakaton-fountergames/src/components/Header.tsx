@@ -17,7 +17,7 @@ export const Header = () => {
             href={"/multySearch"}
             className="text-white hover:text-gray-200 transition duration-200 ease-in-out"
           >
-            Multisearch
+            Multi-Search
           </Link>
         </nav>
       </div>

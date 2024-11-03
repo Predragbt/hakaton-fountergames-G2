@@ -1,12 +1,20 @@
-import React, { useState } from "react";
+import { useRouter } from "next/router";
 import { useData } from "@/context/DataContext";
 import Link from "next/link";
+import React, { useState } from "react";
 
 export const SearchCards = () => {
   const { matches, searchTerm } = useData();
   const [videoStates, setVideoStates] = useState<{
     [key: number]: { start: number | null; autoplay: boolean };
   }>({});
+
+  // Utility to format time
+  const formatTime = (seconds: number) => {
+    const minutes = Math.floor(seconds / 60);
+    const remainingSeconds = seconds % 60;
+    return `${minutes}:${remainingSeconds < 10 ? "0" : ""}${remainingSeconds}`;
+  };
 
   const handleTimestampClick = (videoId: number, timestamp: number) => {
     // Temporarily set `start` to `null` to trigger re-render on the same timestamp
@@ -29,7 +37,7 @@ export const SearchCards = () => {
         const videoId = videoIdMatch ? videoIdMatch[1] : null;
 
         const filteredTranscription = match.transcription.filter((entry) =>
-          entry.word.toLowerCase().includes(searchTerm.toLowerCase())
+          entry.phrase.toLowerCase().includes(searchTerm.toLowerCase())
         );
 
         return (
@@ -64,14 +72,14 @@ export const SearchCards = () => {
                   key={index}
                   className="flex justify-between items-center p-2 bg-gray-700 rounded-lg text-gray-200 mb-4"
                 >
-                  <p>{entry.word.toUpperCase()}:</p>
+                  <p>{entry.phrase}:</p>
                   <button
                     onClick={() =>
                       handleTimestampClick(match.id, entry.timestamp)
                     }
                     className="bg-gradient-to-r from-blue-700 to-purple-700 text-white font-semibold py-1 px-2 rounded-lg hover:from-purple-700 hover:to-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 transition duration-200 ease-out shadow-md hover:shadow-lg"
                   >
-                    {entry.timestamp}s
+                    {formatTime(entry.timestamp)}
                   </button>
                 </div>
               ))}
