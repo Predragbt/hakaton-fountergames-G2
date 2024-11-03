@@ -1,22 +1,17 @@
 import React, { useState } from "react";
+import { useData } from "@/context/DataContext";
 
-interface SearchTermProps {
-  onSearch: (term: string) => void;
-  onClear: () => void;
-}
-
-export const SearchTerm = ({ onSearch, onClear }: SearchTermProps) => {
-  const [searchInput, setSearchInput] = useState<string>("");
+export const SearchTerm = () => {
+  const { searchTerm, searchVideos, clearResults } = useData();
+  const [searchInput, setSearchInput] = useState<string>(searchTerm);
 
   const handleSearchClick = () => {
-    if (searchInput) {
-      onSearch(searchInput);
-    }
+    searchVideos(searchInput);
   };
 
   const handleClearClick = () => {
     setSearchInput("");
-    onClear();
+    clearResults();
   };
 
   return (

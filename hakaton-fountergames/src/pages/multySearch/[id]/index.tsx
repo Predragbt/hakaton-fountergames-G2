@@ -28,11 +28,15 @@ const ShowVideo = () => {
   );
 
   const handleTimestampClick = (timestamp: number) => {
-    setStartAt(timestamp);
+    // Reset startAt to null first, then set it back to the clicked timestamp
+    setStartAt(null);
+    setTimeout(() => {
+      setStartAt(timestamp);
+    }, 0); // This will re-trigger the re-render even if the timestamp is the same
   };
 
   const handleSearchClick = () => {
-    setSearchTerm(searchInput);
+    setSearchTerm(searchInput.trim());
   };
 
   const handleClearSearch = () => {

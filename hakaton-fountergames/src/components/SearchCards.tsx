@@ -1,24 +1,25 @@
 import React, { useState } from "react";
-import { MockDataProps } from "@/mockData/mockData";
 import { useData } from "@/context/DataContext";
 import Link from "next/link";
 
-interface SearchCardsProps {
-  matches: MockDataProps[];
-}
-
-export const SearchCards = ({ matches }: SearchCardsProps) => {
-  const { searchTerm } = useData();
-
+export const SearchCards = () => {
+  const { matches, searchTerm } = useData();
   const [videoStates, setVideoStates] = useState<{
-    [key: number]: { start: number; autoplay: boolean };
+    [key: number]: { start: number | null; autoplay: boolean };
   }>({});
 
   const handleTimestampClick = (videoId: number, timestamp: number) => {
+    // Temporarily set `start` to `null` to trigger re-render on the same timestamp
     setVideoStates((prevState) => ({
       ...prevState,
-      [videoId]: { start: timestamp, autoplay: true },
+      [videoId]: { start: null, autoplay: true },
     }));
+    setTimeout(() => {
+      setVideoStates((prevState) => ({
+        ...prevState,
+        [videoId]: { start: timestamp, autoplay: true },
+      }));
+    }, 0);
   };
 
   return (
@@ -46,18 +47,15 @@ export const SearchCards = ({ matches }: SearchCardsProps) => {
                   allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                   allowFullScreen
                   className="w-full h-full rounded-lg"
-                  key={videoStates[match.id]?.start || 0} // Re-renders iframe on start time change
+                  key={videoStates[match.id]?.start || 0} // Forces re-render on start time change
                 />
               ) : (
                 <p className="text-center text-gray-400">Invalid video URL</p>
               )}
             </div>
             <div className="flex justify-end">
-              <Link
-                href={`/multySearch/${match.id}`}
-                className="justify-item-end"
-              >
-               Click for more details
+              <Link href={`/multySearch/${match.id}`} className="text-blue-500">
+                More details
               </Link>
             </div>
             <div className="text-sm text-gray-400 mt-4">

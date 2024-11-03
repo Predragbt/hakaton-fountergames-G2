@@ -7,7 +7,7 @@ interface DataContextProps {
   selectedVideo: MockDataProps | null;
   matches: MockDataProps[];
   loading: boolean;
-  searchTerm: string; // New searchTerm state
+  searchTerm: string;
   searchVideos: (term: string) => void;
   clearResults: () => void;
   submitVideoUrl: (url: string) => void;
@@ -16,47 +16,52 @@ interface DataContextProps {
 const DataContext = createContext<DataContextProps | undefined>(undefined);
 
 export const DataProvider = ({ children }: { children: React.ReactNode }) => {
+  const router = useRouter();
   const [data] = useState<MockDataProps[]>(mockData);
-  const [selectedVideo, setSelectedVideo] = useState<MockDataProps | null>(null);
+  const [selectedVideo, setSelectedVideo] = useState<MockDataProps | null>(
+    null
+  );
   const [matches, setMatches] = useState<MockDataProps[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
-  const [searchTerm, setSearchTerm] = useState<string>(""); // State to store the search term
-
-  const router = useRouter();
+  const [searchTerm, setSearchTerm] = useState<string>("");
 
   useEffect(() => {
-    const handleRouteChange = () => {
-      clearResults();
+    const handleRouteChange = (url: string) => {
+      // Only keep searchTerm and matches if on the exact /multySearch page
+      if (router.pathname !== "/multySearch") {
+        clearResults();
+      }
     };
 
     router.events.on("routeChangeStart", handleRouteChange);
-
     return () => {
       router.events.off("routeChangeStart", handleRouteChange);
     };
-  }, [router.events]);
-
-  const submitVideoUrl = (url: string) => {
-    const matchedVideo = data.find((video) => video.ytUrl === url);
-    setSelectedVideo(matchedVideo || null);
-  };
+  }, [router.pathname, router.events]);
 
   const searchVideos = (term: string) => {
+    const trimmedTerm = term.trim();
+    setSearchTerm(trimmedTerm);
     setLoading(true);
-    setSearchTerm(term); // Update searchTerm with the provided term
-    const filteredMatches = data.filter((video) =>
-      video.transcription.some((entry) =>
-        entry.word.toLowerCase().includes(term.toLowerCase().trim())
-      )
-    );
-    setMatches(filteredMatches);
+
+    if (trimmedTerm === "") {
+      setMatches([]);
+    } else {
+      const filteredMatches = data.filter((video) =>
+        video.transcription.some((entry) =>
+          entry.word.toLowerCase().includes(trimmedTerm.toLowerCase().trim())
+        )
+      );
+      setMatches(filteredMatches);
+    }
+
     setLoading(false);
   };
 
   const clearResults = () => {
     setMatches([]);
+    setSearchTerm("");
     setSelectedVideo(null);
-    setSearchTerm(""); // Clear the search term
   };
 
   return (
@@ -66,10 +71,10 @@ export const DataProvider = ({ children }: { children: React.ReactNode }) => {
         selectedVideo,
         matches,
         loading,
-        searchTerm, // Pass the searchTerm in context
+        searchTerm,
         searchVideos,
         clearResults,
-        submitVideoUrl,
+        submitVideoUrl: () => {}, // Implement as needed
       }}
     >
       {children}
